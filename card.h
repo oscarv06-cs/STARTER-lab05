@@ -4,26 +4,31 @@
 
 #ifndef CARD_H
 #define CARD_H
-#include <string>
+
 #include <iostream>
+#include <string>
 
-class Card{
-private:
-    char suit;
-    std::string value;
-public:
-    Card(char s, std::string v);
-    std::string getValue() const;
-    char getSuit() const;
-    bool operator<(const Card& other) const;
-    bool operator==(const Card& other) const;
-    bool operator>(const Card& other) const; 
-    std::string toString() const;
+using namespace std;
 
+enum Suit{clubs, diamonds, spades, hearts};
 
-    friend std::ostream& operator<<(std::ostream& out, const Card& card);
-    
+class Card {
+ public:
+    Card(Suit s, string v);
+    bool operator==(const Card& o) const;
+    bool operator<(const Card& o) const;
+    bool operator>(const Card& o) const;
+
+    Suit getSuit() const;
+    string getValue() const;
+
+ private:
+    Suit suit;
+    string value;
+    int getNum() const;
+
 };
 
+std::ostream& operator<<(std::ostream& os, const Card& card);   
 
 #endif
