@@ -1,40 +1,79 @@
-// Feb 14: This file should implement the game using a custom implementation of a BST (that is based on your implementation from lab02)
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <sstream>
 #include "card.h"
 #include "card_list.h"
-//Do not include set in this file
 
 using namespace std;
 
-int main(int argv, char** argc){
-  if(argv < 3){
-    cout << "Please provide 2 file names" << endl;
-    return 1;
-  }
-  
-  ifstream cardFile1 (argc[1]);
-  ifstream cardFile2 (argc[2]);
-  string line;
+int main(int argc, char** argv){
+    if (argc < 3) {
+        cout << "Please provide 2 file names" << endl;
+        return 1;
+    }
 
-  if (cardFile1.fail() || cardFile2.fail() ){
-    cout << "Could not open file " << argc[2];
-    return 1;
-  }
+    ifstream cardFile1(argv[1]);
+    ifstream cardFile2(argv[2]);
+    if (cardFile1.fail() || cardFile2.fail()) {
+        cout << "Could not open file " << argv[2] << endl;
+        return 1;
+    }
 
-  //Read each file
-  while (getline (cardFile1, line) && (line.length() > 0)){
+    bst alice;
+    bst bob;
+    string line;
 
-  }
-  cardFile1.close();
+    // Load Alice's cards
+    while (getline(cardFile1, line) && !line.empty()) {
+        stringstream ss(line);
+        string suit, value;
+        ss >> suit >> value;
+        Card card(suit[0], value);
+        alice.insert(card);
+    }
+    cardFile1.close();
+    // Load Bobs cards
+    while (getline(cardFile2, line) && !line.empty()) {
+        stringstream ss(line);
+        string suit, value;
+        ss >> suit >> value;
+        Card card(suit[0], value);
+        bob.insert(card);
+    }
+    cardFile2.close();
 
+    bool match_found = true;
+    while (match_found) {
+        match_found = false;
+        for (auto it = alice.begin(); it != alice.end(); ++it) {
+            if (bob.contains(*it)) {
+                Card match = *it;
+                alice.remove(match);
+                bob.remove(match);
+                match_found = true;
+                cout << "Alice picked matching card " << match << endl;
+                break;
+            }
+        }
+        for (auto it = bob.rbegin(); it != bob.rend(); ++it) {
+            if (alice.contains(*it)) {
+                Card match = *it;
+                alice.remove(match);
+                bob.remove(match);
+                match_found = true;
+                cout << "Bob picked matching card " << match << endl;
+                break;
+            }
+        }
+    }
+    cout << "Alice's cards:" << endl;
+    for (auto it = alice.begin(); it != alice.end(); ++it)
+        cout << *it << endl;
 
-  while (getline (cardFile2, line) && (line.length() > 0)){
+    cout << "Bob's cards:" << endl;
+    for (auto it = bob.rbegin(); it != bob.rend(); ++it)
+        cout << *it << endl;
 
-  }
-  cardFile2.close();
-  
-  
-  return 0;
+    return 0;
 }
