@@ -3,168 +3,183 @@
 // Implementation of the classes defined in card_list.h
 #include "card_list.h"
 #include "card.h"
+#include <string>
 #include <iostream>
 using namespace std;
-bst::bst() : root(nullptr) {}
-
-bst::~bst() {
-    deleteTree(root);
+CardList::CardList(){
+    root = nullptr;
+}
+CardList::~CardList(){
+    clear(root);
 }
 
-void bst::deleteTree(Node* node) {
-    if (node) {
-        deleteTree(node->left);
-        deleteTree(node->right);
-        delete node;
-    }
-}
-
-void bst::insert(const Card& card) {
-    insertHelper(root, card, nullptr);
-}
-
-void bst::insertHelper(Node*& curr, const Card& card, Node* parent) {
-    if (!curr) {
-        curr = new Node(card, parent);
+void CardList::clear(Node* n){
+    if(!n){
         return;
+    }else{
+        clear(n->left);
+        clear(n->right);
+        delete n;
     }
-    if (card < curr->card) insertHelper(curr->left, card, curr);
-    else if (card > curr->card) insertHelper(curr->right, card, curr);
-    // duplicates are ignored
 }
 
-bool bst::contains(const Card& card) const {
-    return findNode(root, card) != nullptr;
+bool CardList::insert(const Card& card) {
+    if(!root){
+        root = new Node(card);
+        return true;
+    }
+    return insert(root, card) != nullptr;
 }
 
-bst::Node* bst::findNode(Node* curr, const Card& card) const {
-    if (!curr) return nullptr;
-    if (card == curr->card) return curr;
-    if (card < curr->card) return findNode(curr->left, card);
-    else return findNode(curr->right, card);
+CardList::Node* CardList::insert(Node* n, const Card& card) {
+    if(!n) {return new Node(card);}
+    if(card < n->card){
+        Node* temp = insert(n->left, card);
+        n->left = temp;
+        temp->parent = n;
+    }
+    else{
+        Node* temp = insert(n->right, card);
+        n->right = temp;
+        temp->parent = n;
+    }
+    return n;
 }
 
-void bst::remove(const Card& card) {
-    removeNode(root, card);
+bool CardList::find(const Card& card) const{
+    return find(root, card) != nullptr;
 }
 
-void bst::removeNode(Node*& curr, const Card& card) {
-    if (!curr) return;
-    if (card < curr->card) removeNode(curr->left, card);
-    else if (card > curr->card) removeNode(curr->right, card);
-    else {
-        if (!curr->left && !curr->right) {
-            delete curr;
-            curr = nullptr;
-        } else if (!curr->left || !curr->right) {
-            Node* temp = curr->left ? curr->left : curr->right;
-            temp->parent = curr->parent;
-            delete curr;
-            curr = temp;
-        } else {
-            Node* succ = getMin(curr->right);
-            curr->card = succ->card;
-            removeNode(curr->right, succ->card);
+CardList::Node* CardList::find(Node* n, const Card& card) const{
+    if(!n) {return nullptr;}
+    if(n->card == card){
+        return n;
+    }
+    else if(card < n->card){
+        return find(n->left, card);
+    }
+    else{
+        return find(n->right, card);
+    }
+}
+
+bool CardList::remove(const Card& card){
+    if(!root || !find(card)){
+        return false;
+    }
+    root = removeNode(root, card);
+    return true;
+}
+
+CardList::Node* CardList::removeNode(Node* n, const Card& card){
+    if(!n) {return nullptr;}
+    if(card < n->card){
+        n->left = removeNode(n->left, card);
+    }else if(card > n->card){
+        n->right = removeNode(n->right, card);
+    }else{
+        if(!n->left){
+            Node* temp = n->right;
+            if(temp){
+                temp->parent = n->parent;
+            }
+            delete n;
+            return temp;
+        }
+        else if(!n->right){
+            Node* temp = n->left;
+            if(temp){
+                temp->parent = n->parent;
+            }
+            delete n;
+            return temp;
+        }else{
+            Node* temp = minValueNode(n->right);
+            n->card = temp->card;
+            n->right = removeNode(n->right, temp->card);
         }
     }
+    return n;
 }
-
-void bst::printDeck() const {
+const Card* CardList::minValue() const{
+    Node* n = minValueNode(root);
+    if(n != nullptr){
+        return &n->card;
+    }
+    else{
+        return nullptr;
+    }
+}
+CardList::Node* CardList::minValueNode(Node* n) const{
+    while(n && n->left){
+        n = n->left;
+    }
+    return n;
+}
+const Card* CardList::maxValue() const{
+    Node* n = maxValueNode(root);
+    if(n != nullptr){
+        return &n->card;
+    }
+    else{
+        return nullptr;
+    }
+}
+CardList::Node* CardList::maxValueNode(Node* n) const{
+    while(n && n->right){
+        n = n->right;
+    }
+    return n;
+}
+const Card* CardList::successor(const Card& card) const {
+    Node* n = find(root, card);
+    if(!n) {return nullptr;}
+    Node* temp = successorNode(n);
+    if(temp != nullptr){
+        return &temp->card;
+    }else{
+        return nullptr;
+    }
+}
+CardList::Node* CardList::successorNode(Node* n) const {
+    if(n->right){
+        return minValueNode(n->right);
+    }
+    Node* temp = n->parent;
+    while(temp && n == temp->right){
+        n = temp;
+        temp = temp->parent;
+    }
+    return temp;
+}
+const Card* CardList::predecessor(const Card& card) const {
+    Node* n = find(root, card);
+    if(!n) {return nullptr;}
+    Node* temp = predecessorNode(n);
+    if(temp != nullptr){
+        return &temp->card;
+    }else{
+        return nullptr;
+    }
+}
+CardList::Node* CardList::predecessorNode(Node* n) const {
+    if(n->left){
+        return maxValueNode(n->left);
+    }
+    Node* temp = n->parent;
+    while(temp && n == temp->left){
+        n = temp;
+        temp = temp->parent;
+    }
+    return temp;
+}
+void CardList::printInOrder() const {
     printInOrder(root);
-    cout << endl;
 }
-
-void bst::printInOrder(Node* node) const {
-    if (!node) return;
-    printInOrder(node->left);
-    cout << node->card.toString() << endl;
-    printInOrder(node->right);
-}
-
-bst::Node* bst::getMin(Node* node) const {
-    while (node && node->left) node = node->left;
-    return node;
-}
-
-bst::Node* bst::getMax(Node* node) const {
-    while (node && node->right) node = node->right;
-    return node;
-}
-
-bst::Node* bst::getSuccessor(Node* node) const {
-    if (node->right) return getMin(node->right);
-    Node* p = node->parent;
-    while (p && node == p->right) {
-        node = p;
-        p = p->parent;
+void CardList::printInOrder(Node* n) const {
+    if(n) {
+        printInOrder(n->left);
+        cout << n->card << endl;
+        printInOrder(n->right);
     }
-    return p;
 }
-
-bst::Node* bst::getPredecessor(Node* node) const {
-    if (node->left) return getMax(node->left);
-    Node* p = node->parent;
-    while (p && node == p->left) {
-        node = p;
-        p = p->parent;
-    }
-    return p;
-}
-
-bst::Iterator bst::begin() const {
-    return Iterator(getMin(root), this);
-}
-
-bst::Iterator bst::end() const {
-    return Iterator(nullptr, this);
-}
-
-bst::Iterator bst::rbegin() const {
-    return Iterator(getMax(root), this);
-}
-
-bst::Iterator bst::rend() const {
-    return Iterator(nullptr, this);
-}
-
-
-bst::Iterator& bst::Iterator::operator++() {
-    curr = tree->getSuccessor(curr);
-    return *this;
-}
-
-bst::Iterator& bst::Iterator::operator--() {
-    curr = tree->getPredecessor(curr);
-    return *this;
-}
-
-void playGame(bst& alice, bst& bob) {
-    bool matchFound = true;
-    
-    while (matchFound) {
-        matchFound = false;
-        for (auto it = alice.begin(); it != alice.end(); ++it) {
-            if (bob.contains(*it)) {
-                cout << "Alice picked matching card " << *it << endl;
-                alice.remove(*it);
-                bob.remove(*it);
-                matchFound = true;
-                break;
-            }
-        }
-        for (auto it = bob.rbegin(); it != bob.rend(); --it) {
-            if (alice.contains(*it)) {
-                cout << "Bob picked matching card " << *it << endl;
-                alice.remove(*it);
-                bob.remove(*it);
-                matchFound = true;
-                break; 
-            }
-        }
-    }
-    cout << "Alice's cards:" << endl;
-    alice.printDeck();
-    cout << "Bob's cards:" << endl;
-    bob.printDeck();
-}
-
