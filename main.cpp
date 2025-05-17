@@ -43,33 +43,35 @@ int main(int argc, char** argv) {
     cardFile2.close();
 
     bool match_found = true;
-    while (true) {
-      bool found = false;
-        for (auto it = alice.begin(); it != alice.end(); ++it) {
-          if (bob.contains(*it)) {
-              Card match = *it;
-              alice.remove(match);
-              bob.remove(match);
-              cout << "Alice picked matching card " << match << endl;
-              found = true;
-              break;
-          }
-      }
-  
-      if (found) continue;
-        for (auto it = bob.rbegin(); it != bob.rend(); ++it) {
-          if (alice.contains(*it)) {
-              Card match = *it;
-              alice.remove(match);
-              bob.remove(match);
-              cout << "Bob picked matching card " << match << endl;
-              found = true;
-              break;
-          }
-      }
-  
-      if (!found) break;
-  }
+
+while (match_found) {
+    match_found = false;
+
+    // Alice's turn
+    for (auto it = alice.begin(); it != alice.end(); ++it) {
+        if (bob.contains(*it)) {
+            Card match = *it;
+            alice.remove(match);
+            bob.remove(match);
+            cout << "Alice picked matching card " << match << endl;
+            match_found = true;
+            break;
+        }
+    }
+
+    // Bob's turn (no "continue" in between)
+    for (auto it = bob.rbegin(); it != bob.rend(); ++it) {
+        if (alice.contains(*it)) {
+            Card match = *it;
+            alice.remove(match);
+            bob.remove(match);
+            cout << "Bob picked matching card " << match << endl;
+            match_found = true;
+            break;
+        }
+    }
+}
+
   
 cout << endl << "Alice's cards:" << endl;
 for (auto it = alice.begin(); it != alice.end(); ++it) {
