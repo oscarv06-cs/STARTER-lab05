@@ -111,22 +111,22 @@ bst::Node* bst::getPredecessor(Node* node) const {
     return p;
 }
 
-// Iterators
 bst::Iterator bst::begin() const {
-    return Iterator(getMin(root));
+    return Iterator(getMin(root), this);
 }
 
 bst::Iterator bst::end() const {
-    return Iterator(nullptr);
+    return Iterator(nullptr, this);
 }
 
 bst::Iterator bst::rbegin() const {
-    return Iterator(getMax(root));
+    return Iterator(getMax(root), this);
 }
 
 bst::Iterator bst::rend() const {
-    return Iterator(nullptr);
+    return Iterator(nullptr, this);
 }
+
 
 bst::Iterator& bst::Iterator::operator++() {
     curr = tree->getSuccessor(curr);
