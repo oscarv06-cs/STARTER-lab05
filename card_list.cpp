@@ -4,9 +4,7 @@
 #include "card_list.h"
 #include "card.h"
 #include <iostream>
-
 using namespace std;
-
 bst::bst() : root(nullptr) {}
 
 bst::~bst() {
@@ -139,3 +137,5 @@ bst::Iterator& bst::Iterator::operator--() {
     curr = bst().getPredecessor(curr);
     return *this;
 }
+
+
