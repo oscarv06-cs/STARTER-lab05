@@ -1,55 +1,50 @@
 // card_list.h
-// Author: Oscar Valeriano
-// All class declarations related to defining a BST that represents a player's hand
-class bst {
-    private:
-        struct Node {
-            Card card;
-            Node* left;
-            Node* right;
-            Node* parent;
+#ifndef CARD_LIST_H
+#define CARD_LIST_H
 
-            Node(const Card& c, Node* p = nullptr)
-                : card(c), left(nullptr), right(nullptr), parent(p) {}
-        };
+#include "card.h"
+#include <iostream>
 
-        Node* root;
-        void insertHelper(Node*& curr, const Card& card, Node* parent);
-        Node* findNode(Node* curr, const Card& card) const;
-        void removeNode(Node*& curr, const Card& card);
-        void deleteTree(Node* node);
-        void printInOrder(Node* node) const;
-        Node* getMin(Node* node) const;
-        Node* getMax(Node* node) const;
-        Node* getSuccessor(Node* node) const;
-        Node* getPredecessor(Node* node) const;
+class CardList {
+private:
+    struct Node {
+        Card card;
+        Node* left;
+        Node* right;
+        Node* parent;
+        Node(const Card& c, Node* p = nullptr)
+          : card(c), left(nullptr), right(nullptr), parent(p) {}
+    };
 
-    public:
-        bst();
-        ~bst();
-        void insert(const Card& card);
-        void remove(const Card& card);
-        bool contains(const Card& card) const;
-        void printDeck() const;
-        class Iterator {
-        private:
-            Node* curr;
-            const bst* tree;
-        public:
-            Iterator(Node* node = nullptr) : curr(node), tree(nullptr) {}
-            const Card& operator*() const { return curr->card; }
-            const Card* operator->() const { return &(curr->card); }
-            Iterator& operator++();
-            Iterator& operator--();
-            bool operator!=(const Iterator& other) const { return curr != other.curr; }
-            bool operator==(const Iterator& other) const { return curr == other.curr; }
-    
-            friend class bst;
-        };
+    Node* root;
 
-        Iterator begin() const;
-        Iterator end() const;
-        Iterator rbegin() const;
-        Iterator rend() const;
+    // internal helpers
+    void clear(Node* n);
+    Node* insert(Node* n, const Card& card);
+    Node* find(Node* n, const Card& card) const;
+    Node* removeNode(Node* n, const Card& card);
+    Node* minValueNode(Node* n) const;
+    Node* maxValueNode(Node* n) const;
+    Node* successorNode(Node* n) const;
+    Node* predecessorNode(Node* n) const;
+    void printInOrder(Node* n) const;
+
+public:
+    CardList();
+    ~CardList();
+
+    bool insert(const Card& card);
+    bool find(const Card& card) const;
+    bool remove(const Card& card);
+
+    // public navigators
+    const Card* minValue() const;
+    const Card* maxValue() const;
+    const Card* successor(const Card& card)   const;
+    const Card* predecessor(const Card& card) const;
+
+    // for dumping
+    void printInOrder() const;
 };
-#endif
+
+#endif // CARD_LIST_H
