@@ -1,4 +1,5 @@
 // card_list.h
+// card_list.h
 #ifndef CARD_LIST_H
 #define CARD_LIST_H
 
@@ -15,35 +16,23 @@ private:
         Node(const Card& c, Node* p = nullptr)
           : card(c), left(nullptr), right(nullptr), parent(p) {}
     };
-
     Node* root;
 
-    // internal helpers
-    void clear(Node* n);
-    Node* insert(Node* n, const Card& card);
-    Node* find(Node* n, const Card& card) const;
-    Node* removeNode(Node* n, const Card& card);
-    Node* minValueNode(Node* n) const;
-    Node* maxValueNode(Node* n) const;
-    Node* successorNode(Node* n) const;
-    Node* predecessorNode(Node* n) const;
-    void printInOrder(Node* n) const;
+    // … all your private helpers here …
 
 public:
     CardList();
     ~CardList();
 
-    bool insert(const Card& card);
-    bool find(const Card& card) const;
-    bool remove(const Card& card);
+    bool insert(const Card& c);
+    bool find(const Card& c) const;
+    bool remove(const Card& c);
 
-    // public navigators
     const Card* minValue() const;
     const Card* maxValue() const;
-    const Card* successor(const Card& card)   const;
-    const Card* predecessor(const Card& card) const;
+    const Card* successor(const Card& c) const;
+    const Card* predecessor(const Card& c) const;
 
-    // for dumping
     void printInOrder() const;
 };
 

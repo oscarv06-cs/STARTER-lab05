@@ -1,59 +1,47 @@
 // card.cpp
 // Author: Oscar Valeriano
 // Implementation of the classes defined in card.h
+// card.cpp
 #include "card.h"
 #include <ostream>
+#include <string>
+#include <algorithm>
 
-char Card:: getSuit() const{
+Card::Card(char s, const std::string& v)
+  : suit(s), value(v) {}
+
+char Card::getSuit() const {
     return suit;
 }
 
-std::string Card:: getValue() const{
+std::string Card::getValue() const {
     return value;
 }
 
-Card::Card(char s, std::string v) {
-    value = v;
-    suit = s;
+// Comparison operators
+bool Card::operator==(const Card& o) const {
+    return suit == o.suit && value == o.value;
 }
 
-bool Card:: operator<(const Card& other) const{
-    std::string suitOrder = "cdsh";
-    int thisSuit = suitOrder.find(this->suit);
-    int otherSuit = suitOrder.find(other.suit);
+bool Card::operator<(const Card& o) const {
+    static const std::string suitOrder = "cdsh";
+    auto s1 = suitOrder.find(suit);
+    auto s2 = suitOrder.find(o.suit);
+    if (s1 != s2) return s1 < s2;
 
-    if (thisSuit != otherSuit){
-        return thisSuit < otherSuit;
-    }
-    std::string valOrder[] = {"a", "2", "3", "4", "5", "6", "7", "8", "9", "10", "j", "q", "k"};
-    int thisVal = 0;
-    int otherVal = 0;
-
-    for (int i = 0; i < 13; i++){
-        if (valOrder[i] == this->value){
-            thisVal = i;
-        }
-        if (valOrder[i] == other.value){
-            otherVal = i;
-        }
-    }
-    return thisVal < otherVal;
+    static const std::string valOrder[] = {
+      "a","2","3","4","5","6","7","8","9","10","j","q","k"
+    };
+    auto i1 = std::find(std::begin(valOrder), std::end(valOrder), value);
+    auto i2 = std::find(std::begin(valOrder), std::end(valOrder), o.value);
+    return i1 < i2;
 }
 
-
-std::ostream& operator<<(std::ostream& out, const Card& card){
-    out << card.getSuit() << " " << card.getValue();
-    return out;
+bool Card::operator>(const Card& o) const {
+    return o < *this;
 }
 
-bool Card::operator==(const Card& other) const {
-    return this->suit == other.suit && this->value == other.value;
-}
-
-bool Card::operator>(const Card& other) const {
-    return other < *this;
-}
-
-std::string Card::toString() const {
-    return std::string(1, suit) + " " + value;
+std::ostream& operator<<(std::ostream& os, const Card& card) {
+    os << card.getSuit() << " " << card.getValue();
+    return os;
 }
