@@ -17,7 +17,12 @@ public:
     char getSuit() const;
     bool operator<(const Card& other) const;
     bool operator==(const Card& other) const;
+    bool operator>(const Card& other) const; 
+    std::string toString() const;
+
+
     friend std::ostream& operator<<(std::ostream& out, const Card& card);
+    
 };
 
 

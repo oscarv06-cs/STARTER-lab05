@@ -129,13 +129,42 @@ bst::Iterator bst::rend() const {
 }
 
 bst::Iterator& bst::Iterator::operator++() {
-    curr = bst().getSuccessor(curr);
+    curr = tree->getSuccessor(curr);
     return *this;
 }
 
 bst::Iterator& bst::Iterator::operator--() {
-    curr = bst().getPredecessor(curr);
+    curr = tree->getPredecessor(curr);
     return *this;
 }
 
+void playGame(bst& alice, bst& bob) {
+    bool matchFound = true;
+    
+    while (matchFound) {
+        matchFound = false;
+        for (auto it = alice.begin(); it != alice.end(); ++it) {
+            if (bob.contains(*it)) {
+                cout << "Alice picked matching card " << *it << endl;
+                alice.remove(*it);
+                bob.remove(*it);
+                matchFound = true;
+                break;
+            }
+        }
+        for (auto it = bob.rbegin(); it != bob.rend(); --it) {
+            if (alice.contains(*it)) {
+                cout << "Bob picked matching card " << *it << endl;
+                alice.remove(*it);
+                bob.remove(*it);
+                matchFound = true;
+                break; 
+            }
+        }
+    }
+    cout << "Alice's cards:" << endl;
+    alice.printDeck();
+    cout << "Bob's cards:" << endl;
+    bob.printDeck();
+}
 

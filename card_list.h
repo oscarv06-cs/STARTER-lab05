@@ -19,7 +19,6 @@ class bst {
     
         Node* root;
     
-        // Helpers
         void insertHelper(Node*& curr, const Card& card, Node* parent);
         Node* findNode(Node* curr, const Card& card) const;
         void removeNode(Node*& curr, const Card& card);
@@ -40,10 +39,10 @@ class bst {
         bool contains(const Card& card) const;
         void printDeck() const;
     
-        // Iterator
         class Iterator {
         private:
             Node* curr;
+            const bst* tree;
     
         public:
             Iterator(Node* node = nullptr) : curr(node) {}

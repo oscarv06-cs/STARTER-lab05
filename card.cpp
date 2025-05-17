@@ -45,3 +45,15 @@ std::ostream& operator<<(std::ostream& out, const Card& card){
     out << card.getSuit() << " " << card.getValue();
     return out;
 }
+
+bool Card::operator==(const Card& other) const {
+    return this->suit == other.suit && this->value == other.value;
+}
+
+bool Card::operator>(const Card& other) const {
+    return other < *this;
+}
+
+std::string Card::toString() const {
+    return std::string(1, suit) + " " + value;
+}
