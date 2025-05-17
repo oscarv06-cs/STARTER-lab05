@@ -7,7 +7,7 @@
 
 using namespace std;
 
-int main(int argc, char** argv){
+int main(int argc, char** argv) {
     if (argc < 3) {
         cout << "Please provide 2 file names" << endl;
         return 1;
@@ -24,7 +24,6 @@ int main(int argc, char** argv){
     bst bob;
     string line;
 
-    // Load Alice's cards
     while (getline(cardFile1, line) && !line.empty()) {
         stringstream ss(line);
         string suit, value;
@@ -33,7 +32,7 @@ int main(int argc, char** argv){
         alice.insert(card);
     }
     cardFile1.close();
-    // Load Bobs cards
+
     while (getline(cardFile2, line) && !line.empty()) {
         stringstream ss(line);
         string suit, value;
@@ -46,34 +45,41 @@ int main(int argc, char** argv){
     bool match_found = true;
     while (match_found) {
         match_found = false;
+
+        // Alice's turn
         for (auto it = alice.begin(); it != alice.end(); ++it) {
             if (bob.contains(*it)) {
                 Card match = *it;
                 alice.remove(match);
                 bob.remove(match);
-                match_found = true;
                 cout << "Alice picked matching card " << match << endl;
+                match_found = true;
                 break;
             }
         }
+
+        // Bob's turn
         for (auto it = bob.rbegin(); it != bob.rend(); ++it) {
             if (alice.contains(*it)) {
                 Card match = *it;
                 alice.remove(match);
                 bob.remove(match);
-                match_found = true;
                 cout << "Bob picked matching card " << match << endl;
+                match_found = true;
                 break;
             }
         }
     }
+
     cout << "Alice's cards:" << endl;
-    for (auto it = alice.begin(); it != alice.end(); ++it)
+    for (auto it = alice.begin(); it != alice.end(); ++it) {
         cout << *it << endl;
+    }
 
     cout << "Bob's cards:" << endl;
-    for (auto it = bob.rbegin(); it != bob.rend(); ++it)
+    for (auto it = bob.rbegin(); it != bob.rend(); ++it) {
         cout << *it << endl;
+    }
 
     return 0;
 }
