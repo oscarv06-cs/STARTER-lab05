@@ -1,34 +1,48 @@
 // card.h
 // Author: Oscar Valeriano
 // All class declarations related to defining a single card go here
+#ifndef CARD_LIST_H
+#define CARD_LIST_H
 
-#ifndef CARD_H
-#define CARD_H
+#include "card.h"
 
-#include <iostream>
-#include <string>
+class CardList {
+private:
+    struct Node {
+        Card card;
+        Node* left;
+        Node* right;
+        Node* parent;
+        Node(const Card& c, Node* p = nullptr)
+          : card(c), left(nullptr), right(nullptr), parent(p) {}
+    };
+    Node* root;
 
-using namespace std;
+    //  helpers
+    Node* insert(Node* n, const Card& card);
+    Node* find(Node* n, const Card& card) const;
+    Node* removeNode(Node* n, const Card& card);
+    void clear(Node* n);
+    Node* minValueNode(Node* n) const;
+    Node* maxValueNode(Node* n) const;
+    Node* successorNode(Node* n) const;
+    Node* predecessorNode(Node* n) const;
+    void printInOrder(Node* n) const;
 
-enum Suit{clubs, diamonds, spades, hearts};
+public:
+    CardList();
+    ~CardList();
 
-class Card {
- public:
-    Card(Suit s, string v);
-    bool operator==(const Card& o) const;
-    bool operator<(const Card& o) const;
-    bool operator>(const Card& o) const;
+    bool insert(const Card& card);
+    bool find(const Card& card) const;
+    bool remove(const Card& card);
 
-    Suit getSuit() const;
-    string getValue() const;
+    const Card* minValue() const;
+    const Card* maxValue() const;
+    const Card* successor(const Card& card) const;
+    const Card* predecessor(const Card& card) const;
 
- private:
-    Suit suit;
-    string value;
-    int getNum() const;
-
+    void printInOrder() const;
 };
 
-std::ostream& operator<<(std::ostream& os, const Card& card);   
-
-#endif
+#endif // CARD_LIST_H
