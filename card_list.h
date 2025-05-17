@@ -45,7 +45,8 @@ class bst {
             const bst* tree;
     
         public:
-            Iterator(Node* node = nullptr) : curr(node) {}
+            Iterator(Node* node = nullptr, const bst* t = nullptr) : curr(node), tree(t) {}
+
             const Card& operator*() const { return curr->card; }
             const Card* operator->() const { return &(curr->card); }
     
