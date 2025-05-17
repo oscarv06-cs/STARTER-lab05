@@ -71,6 +71,7 @@ int main(int argc, char** argv) {
         }
     }
 
+    // Match formatting exactly
     cout << "Alice's cards:" << endl;
     for (auto it = alice.begin(); it != alice.end(); ++it) {
         cout << *it << endl;

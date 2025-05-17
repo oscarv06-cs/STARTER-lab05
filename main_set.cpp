@@ -60,8 +60,7 @@ int main(int argc, char** argv){
         alice.erase(match);
         bob.erase(match);
         match_found = true;
-        cout << endl;
-        cout << "Alice picked matching card " << match << endl;
+        cout << "/nAlice picked matching card " << match << endl;
         break; //Ends the turn
       }
 
@@ -71,8 +70,7 @@ int main(int argc, char** argv){
       alice.erase(match);
       bob.erase(match);
       match_found = true;
-      cout << endl;
-      cout << "Bob picked matching card " << match << endl;
+      cout << "/nBob picked matching card " << match << endl;
       break; //Ends the turn
     }
   }
