@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    CardList alice, bob;
+    bst alice, bob;
     string line;
 
     // Read Alice's hand

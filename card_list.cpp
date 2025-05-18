@@ -6,14 +6,14 @@
 #include <string>
 #include <iostream>
 using namespace std;
-CardList::CardList(){
+bst::bst(){
     root = nullptr;
 }
-CardList::~CardList(){
+bst::~bst(){
     clear(root);
 }
 
-void CardList::clear(Node* n){
+void bst::clear(Node* n){
     if(!n){
         return;
     }else{
@@ -23,7 +23,7 @@ void CardList::clear(Node* n){
     }
 }
 
-bool CardList::insert(const Card& card) {
+bool bst::insert(const Card& card) {
     if(!root){
         root = new Node(card);
         return true;
@@ -31,7 +31,7 @@ bool CardList::insert(const Card& card) {
     return insert(root, card) != nullptr;
 }
 
-CardList::Node* CardList::insert(Node* n, const Card& card) {
+bst::Node* bst::insert(Node* n, const Card& card) {
     if(!n) {return new Node(card);}
     if(card < n->card){
         Node* temp = insert(n->left, card);
@@ -46,11 +46,11 @@ CardList::Node* CardList::insert(Node* n, const Card& card) {
     return n;
 }
 
-bool CardList::find(const Card& card) const{
+bool bst::find(const Card& card) const{
     return find(root, card) != nullptr;
 }
 
-CardList::Node* CardList::find(Node* n, const Card& card) const{
+bst::Node* bst::find(Node* n, const Card& card) const{
     if(!n) {return nullptr;}
     if(n->card == card){
         return n;
@@ -63,7 +63,7 @@ CardList::Node* CardList::find(Node* n, const Card& card) const{
     }
 }
 
-bool CardList::remove(const Card& card){
+bool bst::remove(const Card& card){
     if(!root || !find(card)){
         return false;
     }
@@ -71,7 +71,7 @@ bool CardList::remove(const Card& card){
     return true;
 }
 
-CardList::Node* CardList::removeNode(Node* n, const Card& card){
+bst::Node* bst::removeNode(Node* n, const Card& card){
     if(!n) {return nullptr;}
     if(card < n->card){
         n->left = removeNode(n->left, card);
@@ -101,7 +101,7 @@ CardList::Node* CardList::removeNode(Node* n, const Card& card){
     }
     return n;
 }
-const Card* CardList::minValue() const{
+const Card* bst::minValue() const{
     Node* n = minValueNode(root);
     if(n != nullptr){
         return &n->card;
@@ -110,13 +110,13 @@ const Card* CardList::minValue() const{
         return nullptr;
     }
 }
-CardList::Node* CardList::minValueNode(Node* n) const{
+bst::Node* bst::minValueNode(Node* n) const{
     while(n && n->left){
         n = n->left;
     }
     return n;
 }
-const Card* CardList::maxValue() const{
+const Card* bst::maxValue() const{
     Node* n = maxValueNode(root);
     if(n != nullptr){
         return &n->card;
@@ -125,13 +125,13 @@ const Card* CardList::maxValue() const{
         return nullptr;
     }
 }
-CardList::Node* CardList::maxValueNode(Node* n) const{
+bst::Node* bst::maxValueNode(Node* n) const{
     while(n && n->right){
         n = n->right;
     }
     return n;
 }
-const Card* CardList::successor(const Card& card) const {
+const Card* bst::successor(const Card& card) const {
     Node* n = find(root, card);
     if(!n) {return nullptr;}
     Node* temp = successorNode(n);
@@ -141,7 +141,7 @@ const Card* CardList::successor(const Card& card) const {
         return nullptr;
     }
 }
-CardList::Node* CardList::successorNode(Node* n) const {
+bst::Node* bst::successorNode(Node* n) const {
     if(n->right){
         return minValueNode(n->right);
     }
@@ -152,7 +152,7 @@ CardList::Node* CardList::successorNode(Node* n) const {
     }
     return temp;
 }
-const Card* CardList::predecessor(const Card& card) const {
+const Card* bst::predecessor(const Card& card) const {
     Node* n = find(root, card);
     if(!n) {return nullptr;}
     Node* temp = predecessorNode(n);
@@ -162,7 +162,7 @@ const Card* CardList::predecessor(const Card& card) const {
         return nullptr;
     }
 }
-CardList::Node* CardList::predecessorNode(Node* n) const {
+bst::Node* bst::predecessorNode(Node* n) const {
     if(n->left){
         return maxValueNode(n->left);
     }
@@ -173,10 +173,10 @@ CardList::Node* CardList::predecessorNode(Node* n) const {
     }
     return temp;
 }
-void CardList::printInOrder() const {
+void bst::printInOrder() const {
     printInOrder(root);
 }
-void CardList::printInOrder(Node* n) const {
+void bst::printInOrder(Node* n) const {
     if(n) {
         printInOrder(n->left);
         cout << n->card << endl;
