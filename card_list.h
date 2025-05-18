@@ -1,13 +1,11 @@
-// card_list.h
-// card_list.h
 #ifndef CARD_LIST_H
 #define CARD_LIST_H
 
 #include "card.h"
 #include <iostream>
 
-class CardList {
-private:
+class bst {
+public:
     struct Node {
         Card card;
         Node* left;
@@ -16,24 +14,32 @@ private:
         Node(const Card& c, Node* p = nullptr)
           : card(c), left(nullptr), right(nullptr), parent(p) {}
     };
-    Node* root;
-
-    // … all your private helpers here …
-
-public:
-    CardList();
-    ~CardList();
-
+    // Iterator class declaration
+    class Iterator {
+        Node* current;
+        const bst* tree;
+    public:
+        Iterator(Node* n = nullptr, const bst* t = nullptr);
+        Iterator& operator++();
+        Iterator& operator--();
+        const Card& operator*() const;
+        const Card* operator->() const;
+        bool operator==(const Iterator& other) const;
+        bool operator!=(const Iterator& other) const;
+    };
+    // BST public methods
+    bst();
+    ~bst();
     bool insert(const Card& c);
-    bool find(const Card& c) const;
+    bool contains(const Card& c) const;
     bool remove(const Card& c);
-
-    const Card* minValue() const;
-    const Card* maxValue() const;
-    const Card* successor(const Card& c) const;
-    const Card* predecessor(const Card& c) const;
-
-    void printInOrder() const;
+    Iterator begin() const;
+    Iterator end() const;
+    Iterator rbegin() const;
+    Iterator rend() const;
+    void printDeck(std::ostream& out = std::cout) const;
+private:
+    Node* root;
 };
 
-#endif // CARD_LIST_H
+#endif
