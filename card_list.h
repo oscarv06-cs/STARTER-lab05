@@ -50,6 +50,16 @@ public:
     void printDeck(std::ostream& out = std::cout) const;
 private:
     Node* root;
+    void clear(Node* n);
+    Node* insert(Node* n, const Card& card);
+    Node* find(Node* n, const Card& card) const;
+    Node* removeNode(Node* n, const Card& card);
+    Node* minValueNode(Node* n) const;
+    Node* maxValueNode(Node* n) const;
+    Node* successorNode(Node* n) const;
+    Node* predecessorNode(Node* n) const;
+    void printInOrder(Node* n) const;
+    
 };
 
 #endif
