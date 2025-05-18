@@ -1,8 +1,6 @@
 // card_list.cpp
 // Author: Oscar Valeriano
 // Implementation of the classes defined in card_list.h
-
-
 #include "card_list.h"
 #include "card.h"
 #include <string>
@@ -179,14 +177,14 @@ bool bst::Iterator::operator!=(const Iterator& other) const {
     return !(*this == other);
 }
 
-// Forward: in-order successor
+// in-order successor
 bst::Iterator& bst::Iterator::operator++() {
     if (!current) return *this; 
     current = tree->successorNode(current);
     return *this;
 }
 
-// Backward: in-order predecessor
+// in-order predecessor
 bst::Iterator& bst::Iterator::operator--() {
     if (!current) {
         current = tree->maxValueNode(tree->root);

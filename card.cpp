@@ -9,11 +9,11 @@
 
 Card::Card(char s, const std::string& v)
   : suit(s), value(v) {}
-
+//gets suit of a card and returns it
 char Card::getSuit() const {
     return suit;
 }
-
+//gets value and returns it of a card
 std::string Card::getValue() const {
     return value;
 }
@@ -22,7 +22,7 @@ std::string Card::getValue() const {
 bool Card::operator==(const Card& o) const {
     return suit == o.suit && value == o.value;
 }
-
+//initiates what orders the suits are going to be in and the card value order 
 bool Card::operator<(const Card& o) const {
     static const std::string suitOrder = "cdsh";
     auto s1 = suitOrder.find(suit);
