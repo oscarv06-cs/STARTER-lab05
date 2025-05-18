@@ -47,7 +47,6 @@ int main(int argc, char* argv[]) {
     while (anyMatch) {
         anyMatch = false;
 
-        // Alice’s turn: scan from smallest up
         const Card* a = alice.minValue();
         while (a) {
             if (bob.find(*a)) {
@@ -60,7 +59,6 @@ int main(int argc, char* argv[]) {
             a = alice.successor(*a);
         }
 
-        // Bob’s turn: scan from largest down
         const Card* b = bob.maxValue();
         while (b) {
             if (alice.find(*b)) {
@@ -74,11 +72,10 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    // Print remaining
     cout << "\nAlice's cards:" << endl;
-    alice.printInOrder();
+    alice.printDeck();  
     cout << "\nBob's cards:" << endl;
-    bob.printInOrder();
+    bob.printDeck(); 
 
     return 0;
 }
